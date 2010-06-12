@@ -6,9 +6,9 @@
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace li3_flash_message\tests\cases\extensions\action;
+namespace li3_flash_message\tests\cases\extensions\storage;
 
-use \li3_flash_message\extensions\action\FlashMessage;
+use \li3_flash_message\extensions\storage\FlashMessage;
 use \lithium\storage\Session;
 
 class FlashMessageTest extends \lithium\test\Unit {

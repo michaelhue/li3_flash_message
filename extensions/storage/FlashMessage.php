@@ -6,7 +6,7 @@
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
  
-namespace li3_flash_message\extensions\action;
+namespace li3_flash_message\extensions\storage;
 
 use \lithium\storage\Session;
 

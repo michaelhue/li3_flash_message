@@ -8,7 +8,7 @@
 
 namespace li3_flash_message\extensions\helper;
 
-use \li3_flash_message\extensions\action\FlashMessage as Main;
+use \li3_flash_message\extensions\storage\FlashMessage as Main;
 
 /**
  * Helper to output flash messages.
