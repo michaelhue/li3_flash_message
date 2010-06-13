@@ -8,14 +8,21 @@
 
 namespace li3_flash_message\extensions\helper;
 
-use \li3_flash_message\extensions\storage\FlashMessage as Main;
-
 /**
  * Helper to output flash messages.
  *
  * @see li3_flash_message\extensions\action\FlashMessage
  */
 class FlashMessage extends \lithium\template\Helper {
+
+	/**
+	 * Holds the instance of the flash message storage class
+	 *
+	 * @see \li3_flash_message\extensions\storage\FlashMessage
+	 */
+	protected $_classes = array(
+		'storage' => '\li3_flash_message\extensions\storage\FlashMessage'
+	);
 
 	/**
 	 * Outputs a flash message using a template. The message will be cleared afterwards.
@@ -42,14 +49,15 @@ class FlashMessage extends \lithium\template\Helper {
 		);
 		$options += $defaults;
 		
+		$storage = $this->_classes['storage'];
 		$view = $this->_context->view();
 		$output = '';
 		$type = array($options['type'] => $options['template']);
-		$flash = Main::get($key);
+		$flash = $storage::get($key);
 		
 		if (!empty($flash)) {
 			$data = $options['data'] + array('message' => $flash['message']) + $flash['atts'];
-			Main::clear($key);
+			$storage::clear($key);
 		
 			try {
 				$output = $view->render($type, $data, $options['options']);
