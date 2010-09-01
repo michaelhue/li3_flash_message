@@ -10,7 +10,6 @@
  * Copy this file to `app/views/elements` to customize the output.
  */ 
 ?>
-
-<div id="flash">
-	<?=$message ?>
+<div class="flash-message<?php if(!empty($class)): ?> <?=$class; ?><?php endif; ?>">
+	<?=$message; ?>
 </div>
