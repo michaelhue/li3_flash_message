@@ -33,26 +33,10 @@ use \lithium\storage\Session;
  * }}}
  */
 class FlashMessage extends \lithium\core\StaticObject {
-	
-	/**
-	 * Holds the instance of the session storage class
-	 *
-	 * @see \lithium\storage\Session
-	 */
-	protected static $_storage = null;
 
 	protected static $_classes = array(
 		'session' => '\lithium\storage\Session'
 	);
-	
-	/**
-	 * Initializes the session class.
-	 *
-	 * @return void
-	 */
-	public static function __init() {
-		static::$_storage = static::$_classes['session'];
-	}
 	
 	/**
 	 * Sets a flash message.
@@ -63,8 +47,8 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 * @return void
 	 */
 	public static function set($message, array $atts = array(), $key = 'default') {
-		$storage = static::$_storage;
-		$storage::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'default'));
+		$session = static::$_classes['session'];
+		$session::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'default'));
 	}
 	
 	/**
@@ -74,8 +58,8 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 * @return array
 	 */
 	public static function get($key = 'default') {
-		$storage = static::$_storage;
-		$flash = $storage::read("FlashMessage.{$key}", array('name' => 'default'));
+		$session = static::$_classes['session'];
+		$flash = $session::read("FlashMessage.{$key}", array('name' => 'default'));
 		return $flash;
 	}
 	
@@ -86,12 +70,12 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 * @return void
 	 */
 	public static function clear($key = 'default') {
-		$storage = static::$_storage;
+		$session = static::$_classes['session'];
 		$sessionKey = 'FlashMessage';
 		if (!empty($key)) {
 			$sessionKey .= ".{$key}"; 
 		}
-		$storage::delete($sessionKey, array('name' => 'default'));
+		$session::delete($sessionKey, array('name' => 'default'));
 	}
 	
 }
