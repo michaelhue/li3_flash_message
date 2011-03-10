@@ -8,8 +8,6 @@
  
 namespace li3_flash_message\extensions\storage;
 
-use \lithium\storage\Session;
-
 /**
  * Class for setting, getting and clearing flash messages. Use this class inside your
  * controllers to set messages for your views.
@@ -26,8 +24,13 @@ use \lithium\storage\Session;
  */
 class FlashMessage extends \lithium\core\StaticObject {
 
+	/**
+	 * Class dependencies.
+	 *
+	 * @var array
+	 */
 	protected static $_classes = array(
-		'session' => '\lithium\storage\Session'
+		'session' => 'lithium\storage\Session'
 	);
 	
 	/**
