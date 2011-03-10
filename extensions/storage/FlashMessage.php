@@ -64,7 +64,7 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 */
 	public static function set($message, array $atts = array(), $key = 'default') {
 		$storage = static::$_storage;
-		$storage::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'flash_message'));
+		$storage::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'default'));
 	}
 	
 	/**
@@ -75,7 +75,7 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 */
 	public static function get($key = 'default') {
 		$storage = static::$_storage;
-		$flash = $storage::read("FlashMessage.{$key}", array('name' => 'flash_message'));
+		$flash = $storage::read("FlashMessage.{$key}", array('name' => 'default'));
 		return $flash;
 	}
 	
@@ -91,7 +91,7 @@ class FlashMessage extends \lithium\core\StaticObject {
 		if (!empty($key)) {
 			$sessionKey .= ".{$key}"; 
 		}
-		$storage::delete($sessionKey, array('name' => 'flash_message'));
+		$storage::delete($sessionKey, array('name' => 'default'));
 	}
 	
 }
