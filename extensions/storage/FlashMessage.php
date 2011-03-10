@@ -14,18 +14,10 @@ use \lithium\storage\Session;
  * Class for setting, getting and clearing flash messages. Use this class inside your
  * controllers to set messages for your views.
  *
- * The class requires a configuration named `flash_message` for `\lithium\storage\Session`, e.g.:
- * {{{
- * Session::config(array(
- *     'flash_message' => array('adapter' => 'Php')
- * ));
- * }}}
- *
- * After that you can easily set messages and output them in your views. For example:
  * {{{
  * // Controller
  * if (empty($data)) {
- *     FlashMessage::set('Invalid data.');
+ *     FlashMessage::write('Invalid data.');
  * }
  *
  * // View
@@ -39,28 +31,27 @@ class FlashMessage extends \lithium\core\StaticObject {
 	);
 	
 	/**
-	 * Sets a flash message.
+	 * Writes a flash message.
 	 *
 	 * @param string $message Message that will be stored.
 	 * @param array [$atts] Optional attributes that will be available in the view.
 	 * @param string [$key] Optional key to store multiple flash messages.
-	 * @return void
+	 * @return boolean True on successful write, false otherwise.
 	 */
-	public static function set($message, array $atts = array(), $key = 'default') {
+	public static function write($message, array $atts = array(), $key = 'default') {
 		$session = static::$_classes['session'];
-		$session::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'default'));
+		return $session::write("FlashMessage.{$key}", compact('message', 'atts'), array('name' => 'default'));
 	}
 	
 	/**
-	 * Gets the a flash message.
+	 * Reads a flash message.
 	 *
 	 * @param string [$key] Optional key.
-	 * @return array
+	 * @return array The stored flash message.
 	 */
-	public static function get($key = 'default') {
+	public static function read($key = 'default') {
 		$session = static::$_classes['session'];
-		$flash = $session::read("FlashMessage.{$key}", array('name' => 'default'));
-		return $flash;
+		return $session::read("FlashMessage.{$key}", array('name' => 'default'));
 	}
 	
 	/**
@@ -75,7 +66,7 @@ class FlashMessage extends \lithium\core\StaticObject {
 		if (!empty($key)) {
 			$sessionKey .= ".{$key}"; 
 		}
-		$session::delete($sessionKey, array('name' => 'default'));
+		return $session::delete($sessionKey, array('name' => 'default'));
 	}
 	
 }

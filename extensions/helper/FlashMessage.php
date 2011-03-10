@@ -53,7 +53,7 @@ class FlashMessage extends \lithium\template\Helper {
 		$view = $this->_context->view();
 		$output = '';
 		$type = array($options['type'] => $options['template']);
-		$flash = $storage::get($key);
+		$flash = $storage::read($key);
 		
 		if (!empty($flash)) {
 			$data = $options['data'] + array('message' => $flash['message']) + $flash['atts'];
