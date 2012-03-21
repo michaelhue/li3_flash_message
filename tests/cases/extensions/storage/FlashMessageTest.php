@@ -16,13 +16,13 @@ class FlashMessageTest extends \lithium\test\Unit {
 	public function setUp() {
 		Session::config(array(
 			'default' => array(
-				'adapter' => '\lithium\tests\mocks\storage\session\adapter\MockPhp'
+				'adapter' => 'Memory'
 			)
 		));
 	}
 	
 	public function tearDown() {
-		Session::delete('FlashMessage');
+		Session::delete('default');
 	}
 	
 	public function testWrite() {
