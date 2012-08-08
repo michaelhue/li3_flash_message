@@ -8,6 +8,8 @@
 
 namespace li3_flash_message\extensions\helper;
 
+use lithium\template\TemplateException;
+
 /**
  * Helper to output flash messages.
  *
@@ -21,7 +23,7 @@ class FlashMessage extends \lithium\template\Helper {
 	 * @see \li3_flash_message\extensions\storage\FlashMessage
 	 */
 	protected $_classes = array(
-		'storage' => '\li3_flash_message\extensions\storage\FlashMessage'
+		'storage' => 'li3_flash_message\extensions\storage\FlashMessage'
 	);
 
 	/**
@@ -40,7 +42,7 @@ class FlashMessage extends \lithium\template\Helper {
 	 *              - options: Additional options that will be passed to the renderer.
 	 * @return string Returns the rendered template.
 	 */
-	public function output($key = 'default', array $options = array()) {
+	public function show($key = 'default', array $options = array()) {
 		$defaults = array(
 			'type' => 'element',
 			'template' => 'flash_message',
@@ -48,26 +50,23 @@ class FlashMessage extends \lithium\template\Helper {
 			'options' => array()
 		);
 		$options += $defaults;
-		
+
 		$storage = $this->_classes['storage'];
 		$view = $this->_context->view();
-		$output = '';
 		$type = array($options['type'] => $options['template']);
-		$flash = $storage::read($key);
-		
-		if (!empty($flash)) {
-			$data = $options['data'] + array('message' => $flash['message']) + $flash['atts'];
-			$storage::clear($key);
-		
-			try {
-				$output = $view->render($type, $data, $options['options']);
-			} catch (\Exception $e) {
-				$output = $view->render($type, $data, array('library' => 'li3_flash_message'));
-			}
-		}
-		return $output;
-	}
 
+		if (!$flash = $storage::read($key)) {
+			return;
+		}
+		$data = $options['data'] + array('message' => $flash['message']) + $flash['attrs'];
+		$storage::clear($key);
+
+		try {
+			return $view->render($type, $data, $options['options']);
+		} catch (TemplateException $e) {
+			return = $view->render($type, $data, array('library' => 'li3_flash_message'));
+		}
+	}
 }
 
 ?>

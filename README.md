@@ -1,29 +1,24 @@
 # Flash Message Plugin for Lithium
 
-The Flash Message (li3_flash_message) plugin provides a straightforward interface for displaying status messages to the user.
+The Flash Message (`li3_flash_message`) plugin provides a straightforward interface for displaying status messages to the user.
 
 
-## Setup
+## Goals
 
-Add the plugin to `app/config/bootstrap/libraries.php`.
+- Use existing session storage
+- Eliminate message content from controllers
+- Easily localize messages
+- Use filters to integrate into existing workflow
 
-	Libraries::add('li3_flash_message');
 
-Make sure you have set up a `default` session configuration in `app/config/bootstrap/session.php`.
+## Integration
 
-## Basic Usage
+```
+<?php
 
-	use li3_flash_message\extensions\storage\FlashMessage;
-	
-	// ... some form validation logic ...
-	FlashMessage::write('Error, please check your inputs!');
+// config/bootstrap/libraries.php:
 
-Use the helper to output messages inside your views.
+Libraries::add('li3_flash_message');
 
-	<?=$this->flashMessage->output(); ?>
-
-In order to customize the output, copy `app/libraries/li3_flash_message/views/elements/flash_message.html.php` to `app/views/elements/flash_message.html.php` and adjust it to your needs.
-
-## Advanced Usage
-
-For now please refer to the documented source or the test cases.
+?>
+```

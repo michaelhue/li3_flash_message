@@ -1,11 +1,10 @@
 <?php
 
-use lithium\storage\Session;
+use li3_flash_message\extensions\storage\FlashMessage;
+use lithium\action\Dispatcher;
 
-if (!Session::config()) {
-	Session::config(array(
-		'default' => array('adapter' => 'Php')
-	));
-}
+Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
+	return FlashMessage::bindTo($chain->next($self, $params, $chain));
+});
 
 ?>
