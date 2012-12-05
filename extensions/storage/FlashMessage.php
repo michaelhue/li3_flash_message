@@ -9,6 +9,7 @@
 namespace li3_flash_message\extensions\storage;
 
 use lithium\core\Libraries;
+use lithium\util\String;
 
 /**
  * Class for setting, getting and clearing flash messages. Use this class inside your
@@ -106,22 +107,33 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 * Writes a flash message.
 	 *
 	 * @todo Add closure support to messages
-	 * @param string $message Message that will be stored.
-	 * @param array $attrs Optional attributes that will be available in the view.
+	 * @param string|array $message Message that will be stored.
 	 * @param string $key Optional key to store multiple flash messages.
 	 * @return boolean True on successful write, false otherwise.
 	 */
-	public static function write($message, array $attrs = array(), $key = 'default') {
+	public static function write($message, $key = 'default') {
 		$session = static::$_classes['session'];
-		$base = static::$_config['session']['key'];
-		$key = "{$base}.{$key}";
-		$name = static::$_config['session']['config'];
+		$name    = static::$_config['session']['config'];
+		$base    = static::$_config['session']['key'];
+		$key     = "{$base}.{$key}";
+		$attrs   = array();
 
 		if (static::$_messages === null) {
 			$path = Libraries::get(true, 'path') . '/config/messages.php';
 			static::$_messages = file_exists($path) ? include $path : array();
 		}
-		$message = isset(static::$_messages[$message]) ? static::$_messages[$message] : $message;
+
+		if (is_string($message) && isset(static::$_messages[$message])) {
+			$message = static::$_messages[$message];
+		}
+		if (is_array($message)) {
+			$attrs = $message;
+			$message = $attrs[0];
+			unset($attrs[0]);
+		}
+
+		$message = String::insert($message, $attrs);
+
 		return $session::write($key, compact('message', 'attrs'), compact('name'));
 	}
 
@@ -133,18 +145,23 @@ class FlashMessage extends \lithium\core\StaticObject {
 	 */
 	public static function read($key = 'default') {
 		$session = static::$_classes['session'];
-		return $session::read("FlashMessage.{$key}", array('name' => 'default'));
+		$name    = static::$_config['session']['config'];
+		$base    = static::$_config['session']['key'];
+		$key     = "{$base}.{$key}";
+		return $session::read($key, compact('name'));
 	}
 
 	/**
 	 * Clears all flash messages from the session.
 	 *
+	 * @param string $key Optional key.
 	 * @return void
 	 */
-	public static function clear() {
+	public static function clear($key = 'default') {
 		$session = static::$_classes['session'];
-		$key = static::$_config['session']['key'];
-		$name = static::$_config['session']['config'];
+		$name    = static::$_config['session']['config'];
+		$base    = static::$_config['session']['key'];
+		$key     = ($key === null) ? $base : "{$base}.{$key}";
 		return $session::delete($key, compact('name'));
 	}
 }

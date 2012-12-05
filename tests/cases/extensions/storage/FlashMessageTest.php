@@ -20,60 +20,60 @@ class FlashMessageTest extends \lithium\test\Unit {
 			)
 		));
 	}
-	
+
 	public function tearDown() {
 		Session::delete('default');
 	}
-	
+
 	public function testWrite() {
 		FlashMessage::write('Foo');
-		$expected = array('message' => 'Foo', 'atts' => array());
-		$result = Session::read('FlashMessage.default', array('name' => 'default'));
+		$expected = array('message' => 'Foo', 'attrs' => array());
+		$result = Session::read('message.default', array('name' => 'default'));
 		$this->assertEqual($expected, $result);
-		
-		FlashMessage::write('Foo 2', array('type' => 'notice'));
-		$expected = array('message' => 'Foo 2', 'atts' => array('type' => 'notice'));
-		$result = Session::read('FlashMessage.default', array('name' => 'default'));
+
+		FlashMessage::write(array('Foo 2', 'type' => 'notice'));
+		$expected = array('message' => 'Foo 2', 'attrs' => array('type' => 'notice'));
+		$result = Session::read('message.default', array('name' => 'default'));
 		$this->assertEqual($expected, $result);
-		
-		FlashMessage::write('Foo 3', array(), 'TestKey');
-		$expected = array('message' => 'Foo 3', 'atts' => array());
-		$result = Session::read('FlashMessage.TestKey', array('name' => 'default'));
+
+		FlashMessage::write('Foo 3', 'foobar');
+		$expected = array('message' => 'Foo 3', 'attrs' => array());
+		$result = Session::read('message.foobar', array('name' => 'default'));
 		$this->assertEqual($expected, $result);
 	}
-	
+
 	public function testRead() {
 		FlashMessage::write('Foo');
-		$expected = array('message' => 'Foo', 'atts' => array());
+		$expected = array('message' => 'Foo', 'attrs' => array());
 		$result = FlashMessage::read();
 		$this->assertEqual($expected, $result);
-		
-		FlashMessage::write('Foo 2', array('type' => 'notice'));
-		$expected = array('message' => 'Foo 2', 'atts' => array('type' => 'notice'));
+
+		FlashMessage::write(array('Foo 2', 'type' => 'notice'));
+		$expected = array('message' => 'Foo 2', 'attrs' => array('type' => 'notice'));
 		$result = FlashMessage::read();
 		$this->assertEqual($expected, $result);
-		
-		FlashMessage::write('Foo 3', array(), 'TestKey');
-		$expected = array('message' => 'Foo 3', 'atts' => array());
-		$result = FlashMessage::read('TestKey');
+
+		FlashMessage::write('Foo 3', 'foobar');
+		$expected = array('message' => 'Foo 3', 'attrs' => array());
+		$result = FlashMessage::read('foobar');
 		$this->assertEqual($expected, $result);
 	}
-	
+
 	public function testClear() {
 		FlashMessage::write('Foo');
 		FlashMessage::clear();
-		$result = Session::read('FlashMessage.default', array('name' => 'default'));
+		$result = Session::read('message.default', array('name' => 'default'));
 		$this->assertNull($result);
-		
-		FlashMessage::write('Foo 2', array(), 'TestKey');
-		FlashMessage::clear('TestKey');
-		$result = Session::read('FlashMessage.TestKey', array('name' => 'default'));
+
+		FlashMessage::write('Foo 2', 'test1');
+		FlashMessage::clear('test1');
+		$result = Session::read('message.test1', array('name' => 'default'));
 		$this->assertNull($result);
-		
-		FlashMessage::write('Foo 3', array(), 'TestKey2');
-		FlashMessage::write('Foo 4', array(), 'TestKey3');
+
+		FlashMessage::write('Foo 3', 'test2');
+		FlashMessage::write('Foo 4', 'test3');
 		FlashMessage::clear(null);
-		$result = Session::read('FlashMessage', array('name' => 'default'));
+		$result = Session::read('message', array('name' => 'default'));
 		$this->assertNull($result);
 	}
 
