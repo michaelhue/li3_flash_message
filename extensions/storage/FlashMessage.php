@@ -26,7 +26,7 @@ use lithium\util\String;
  * }
  *
  * // View
- * <?=$this->flashMessage->output(); ?>
+ * <?=$this->flashMessage->show(); ?>
  * }}}
  */
 class FlashMessage extends \lithium\core\StaticObject {
