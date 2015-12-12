@@ -2,7 +2,6 @@
     "name": "gavd/li3_flash_message",
     "description": "The Flash Message plugin  for Lithium provides a straightforward interface for displaying status messages to the user.",
     "type": "lithium-library",
-    "version": "dev-master",
     "license": "MIT",
     "authors": [
         {
