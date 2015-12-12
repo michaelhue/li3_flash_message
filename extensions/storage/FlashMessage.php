@@ -9,7 +9,7 @@
 namespace li3_flash_message\extensions\storage;
 
 use lithium\core\Libraries;
-use lithium\util\String;
+use lithium\util\Text;
 
 /**
  * Class for setting, getting and clearing flash messages. Use this class inside your
@@ -132,7 +132,7 @@ class FlashMessage extends \lithium\core\StaticObject {
 			unset($attrs[0]);
 		}
 
-		$message = String::insert($message, $attrs);
+		$message = Text::insert($message, $attrs);
 
 		return $session::write($key, compact('message', 'attrs'), compact('name'));
 	}
